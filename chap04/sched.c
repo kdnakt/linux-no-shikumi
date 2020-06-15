@@ -124,20 +124,20 @@ int main(int argc, char *argv[]) {
     }
     ret = EXIT_SUCCESS;
 
-    wait_children:
-        if (ret == EXIT_FAILURE)
-            for (i = 0; i < ncreated; i++)
-                if (kill(pids[i], SIGINT) < 0)
-                    warn("kill(%d) failed", pids[i]);
+wait_children:
+    if (ret == EXIT_FAILURE)
         for (i = 0; i < ncreated; i++)
-            if (wait(NULL) < 0)
-                warn("wait() failed");
+            if (kill(pids[i], SIGINT) < 0)
+                warn("kill(%d) failed", pids[i]);
+    for (i = 0; i < ncreated; i++)
+        if (wait(NULL) < 0)
+            warn("wait() failed");
 
-    free_pids:
-        free(pids);
+free_pids:
+    free(pids);
 
-    free_logbuf:
-        free(logbuf);
+free_logbuf:
+    free(logbuf);
 
     exit(ret);
 }
