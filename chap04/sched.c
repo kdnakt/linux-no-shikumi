@@ -66,7 +66,6 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    exit(EXIT_FAILURE);
     int nproc = atoi(argv[1]);
     int total = atoi(argv[2]);
     int resol = atoi(argv[3]);
