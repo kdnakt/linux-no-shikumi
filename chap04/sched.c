@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if (total / resol) {
+    if (total % resol) {
         fprintf(stderr, "<total>%d should be multiple of <resolution>%d\n", total, resol);
         exit(EXIT_FAILURE);
     }
