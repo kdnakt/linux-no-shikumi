@@ -60,7 +60,7 @@ static pid_t *pids;
 
 int main(int argc, char *argv[]) {
     int ret = EXIT_FAILURE;
-    if (argv < 3) {
+    if (argc < 3) {
         fprintf(stderr, "usage: %s <total[ms]> <resolution[ms]>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
