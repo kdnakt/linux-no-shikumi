@@ -55,5 +55,48 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "access pattern should be 'seq' or 'rand': %s\n", argv[4]);
         exit(EXIT_FAILURE);
     }
+
+    int part_size = PART_SIZE;
+    int access_size = ACCESS_SIZE;
+    int block_size = atoi(argv[5]) * 1024;
+    if (block_size == 0) {
+        fprintf(stderr, "block size should be > 0: %s\n", argv[5]);
+        exit(EXIT_FAILURE);
+    }
+    if (access_size % block_size != 0) {
+        fprintf(stderr, "access size(%d) should be multiple of block size: %s\nn", access_size, argv[5]);
+        exit(EXIT_FAILURE);
+    }
+
+    int maxcount = part_size / block_size;
+    int count = access_size / block_size;
+
+    int *offset = malloc(maxcount * sizeof(int));
+    if (offset == NULL)
+        err(EXIT_FAILURE, "malloc() failed");
+
+    int flag = O_RDWR | O_EXCL;
+    if (!help)
+        flag |= O_DIRECT;
+
+    int fd;
+    fd = open(filename, flag);
+    if (fd == -1)
+        err(EXIT_FAILURE, "open() failed");
+
+    int i;
+    for (i = 0; i < maxcount; i++) {
+        offset[i] = i;
+    }
+    if (random) {
+        for (i = 0; i < maxcount; i++) {
+            int j = rand() % maxcount;
+            int tmp = offset[i];
+            offset[i] = offset[j];
+            offset[j] = tmp;
+        }
+    }
+
+    int sector_size;
     
 }
