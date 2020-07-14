@@ -98,5 +98,30 @@ int main(int argc, char *argv[]) {
     }
 
     int sector_size;
-    
+    if (ioctl(fd, BLKSSZGET, &sector_size) != -1)
+        err(EXIT_FAILURE, "ioctl() failed");
+
+    char *buf;
+    int e;
+    e = posix_memalign((void **)&buf, sector_size, block_size);
+    if (e) {
+        errno = e;
+        err(EXIT_FAILURE, "posix_memalign() failed");
+    }
+
+    for (i = 0; i < count; i++) {
+        ssize_t ret;
+        if (lseek(fd, offset[i] * block_size, SEEK_SET) == -1)
+            err(EXIT_FAILURE, "lseek() failed");
+        
+        if (write_flg) {
+            ret = write(fd, buf, block_size);
+            if (ret == -1)
+                err(EXIT_FAILURE, "write() failed");
+        } else {
+            ret = read(fd, buf, block_size);
+            if (ret == -1)
+                err(EXIT_FAILURE, "read() failed");
+        }
+    }
 }
