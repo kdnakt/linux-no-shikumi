@@ -124,4 +124,12 @@ int main(int argc, char *argv[]) {
                 err(EXIT_FAILURE, "read() failed");
         }
     }
+
+    if (fdatasync(fd) == -1)
+        err(EXIT_FAILURE, "fdatasync() failed");
+
+    if (close(fd) == -1)
+        err(EXIT_FAILURE, "close() failed");
+
+    exit(EXIT_SUCCESS);
 }
